@@ -13,3 +13,5 @@ A few resources to get you started if this is your first Flutter project:
 ## DAY 1 - 환경설정 및 깃 허브 연동, C# 기초 살펴보기
 
 - 실행 및 깃 허브 연동 확인 완료!
+
+## 1주차 스프링 개발환경 구축 완료

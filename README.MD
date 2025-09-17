@@ -14,4 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 
 - 실행 및 깃 허브 연동 확인 완료!
 
-## 1주차 스프링 개발환경 구축 완료
+## 1주차 스프링 개발환경 구축 완료 9/10 (수)
+
+## 1주차 스프링 연습문제 적용 완료 9/17 (수)
+

@@ -11,4 +11,13 @@ public class DemoController {
         model.addAttribute("data", " 방갑습니다."); // model 설정
         return "hello"; // hello.html 연결
     }
+    @GetMapping("/hello2") // 전송 방식 GET
+    public String hello2(Model model) {
+        model.addAttribute("data1", " 이수헌님.");
+        model.addAttribute("data2", " 방갑습니다.");
+        model.addAttribute("data3", " 오늘.");
+        model.addAttribute("data4", " 날씨는.");
+        model.addAttribute("data5", " 비가옵니다."); // model 설정
+        return "hello2"; // hello2.html 연결
+    }
 }

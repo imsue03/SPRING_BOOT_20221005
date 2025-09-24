@@ -20,3 +20,4 @@ A few resources to get you started if this is your first Flutter project:
 
 ## 2주차 스프링 포트폴리오 작성하기(1) 완료 9/17 (수) 
 
+## 2주차 스프링 연습문제 적용 완료 9/24 (수)

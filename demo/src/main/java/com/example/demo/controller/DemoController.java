@@ -1,8 +1,11 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.demo.model.service.TestService; // 최상단 서비스 클래스 연동 추가
+import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.model.domain.TestDB;
 
 @Controller // 컨트롤러 어노테이션 명시
 public class DemoController {
@@ -34,5 +37,25 @@ public class DemoController {
     model.addAttribute("para1", "001");
     model.addAttribute("para2", 002);
     return "thymeleaf_test1";
+    }
+    // 클래스 하단 작성
+    @Autowired
+    TestService testService; // DemoController 클래스 아래 객체 생성
+    // 하단에 맵핑 이어서 추가
+
+    @GetMapping("/testdb")
+    public String getAllTestDBs(Model model) {
+
+        TestDB test1 = testService.findByName("이수헌");
+        TestDB test2 = testService.findByName("아저씨");
+        TestDB test3 = testService.findByName("꾸러기");
+        model.addAttribute("data4", test1);
+        model.addAttribute("data5", test2);
+        model.addAttribute("data6", test3);
+        System.out.println("데이터 출력 디버그 : " + test1);
+        System.out.println("데이터 출력 디버그 : " + test2);
+        System.out.println("데이터 출력 디버그 : " + test3);
+
+        return "testdb";
     }
 }

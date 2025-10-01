@@ -2,9 +2,12 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive","security.workspace.trust.enabled": false,
     "spring-boot.ls.java.home": "C:\\Dev\\jdk-21.0.8",
-    "java.jdt.ls.java.home": "C:\\Dev\\jdk-21.0.8",
+    "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-21",
     "redhat.telemetry.enabled": true,
     "git.autofetch": true,
     "dart.flutterSdkPath": "C:\\Dev\\jdk-21.0.8\\flutter",
+    "java.configuration.runtimes": [
+    { "name": "JavaSE-21", "path": "C:\\Program Files\\Java\\jdk-21", "default": true }
+    ]
 
 }

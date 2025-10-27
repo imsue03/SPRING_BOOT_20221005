@@ -33,7 +33,7 @@
                          <td>
                             <a class="btn btn-warning" th:href="@{/article_edit/{id}(id=${article.id})}">수정</a>
                         <!-- 삭제 버튼 -->
-                            <form th:action="@{/api/article_delete/{id}(id=${article.id})}" method="post" style="display:inline;">
+                            <form th:action="@{/articles/{id}(id=${article.id})}" method="post" style="display:inline;">
                                 <input type="hidden" name="_method" value="delete">
                                 <button type="submit" class="btn btn-danger">삭제</button>
                             </form>
@@ -46,7 +46,7 @@
     <!-- 게시글 추가 폼 -->
     <div class="mt-4">
         <h2>게시글 추가</h2>
-        <form th:action="@{/api/articles}" method="post" name="content">
+        <form th:action="@{/articles}" method="post" name="content">
             <div class="form-group">
                 <label for="title">제목:</label>
                 <input type="text" class="form-control" id="title" name="title" required>

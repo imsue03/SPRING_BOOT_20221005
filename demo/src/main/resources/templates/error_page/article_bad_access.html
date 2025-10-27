@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">잘못된 접근</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="alert alert-danger">
+            <h4 class="alert-heading">잘못된 게시판 접근입니다!</h4>
+            <p>요청하신 게시글 번호가 올바르지 않거나 변환할 수 없습니다.</p>
+            <hr>
+            <p class="mb-1"><strong>요청 경로:</strong> <span th:text="${path}">/article_edit/???</span></p>
+            <p class="mb-3"><strong>입력 값:</strong> <span th:text="${input}">-</span></p>
+            <a class="btn btn-primary" href="/article_list">이전 페이지로</a>
+        </div>
+    </div>
+</body>
+
+</html>

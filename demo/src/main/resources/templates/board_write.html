@@ -11,16 +11,27 @@
 <body>
     <div class="container">
         <h1 class="mt-5">블로그 게시판(new)</h1>
-        <!-- 게시글 검색창 -->
-        <form th:action="@{/board_list}" method="get" class="mt-4">
-            <div class="input-group">
-                <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="검색어 입력...">
-                <button type="submit" class="btn btn-primary">검색</button>
-            </div>
-        </form>
         <!-- 게시글 리스트 -->
-
-        <div class="mt-5">
+         <div class="mt-5">
+        <!-- 게시글 추가폼 -->
+         <div class="mt-4">
+            <h2>게시글 추가(제목과 내용 입력)</h2>
+            <form th:action="@{/api/boards}" method="post" name="content">
+                <div class="form-group">
+                    <label for="title">제목:</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">내용:</label>
+                    <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">글 저장하기</button>
+                <input type="hidden" id="user" name="user" value="GUEST">
+                <input type="hidden" id="newdate" name="newdate" value="오늘날짜">
+                <input type="hidden" id="count" name="count" value="0">
+                <input type="hidden" id="likec" name="likec" value="0">
+            </form>
+        </div>
             <h2>게시글 목록</h2>
             <table class="table table-bordered">
                 <thead>
@@ -67,24 +78,6 @@
                     </tr>
                 </tbody>
             </table>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                            <a class="page-link" th:href="@{/board_list(page=${currentPage - 1}, keyword=${keyword})}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                        th:classappend="${i == currentPage} ? 'active'">
-                        <a class="page-link" th:href="@{/board_list(page=${i}, keyword=${keyword})}" th:text="${i + 1}">1</a>
-                    </li>
-                    <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
-                        <a class="page-link" th:href="@{/board_list(page=${currentPage + 1}, keyword=${keyword})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
 </body>

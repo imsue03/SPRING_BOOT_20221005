@@ -23,3 +23,4 @@ public class BlogBadAccess {
         return "error_page/article_bad_access";  
     }
 }
+

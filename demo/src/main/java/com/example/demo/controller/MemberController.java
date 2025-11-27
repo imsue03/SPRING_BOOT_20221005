@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,43 +13,105 @@ import com.example.demo.model.domain.Member;
 import com.example.demo.model.service.AddMemberRequest;
 import com.example.demo.model.service.MemberService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class MemberController {
 
     @Autowired
     MemberService memberService;
 
-    @GetMapping("/join_new") // 회원 가입 페이지 연결
+    // 회원가입 페이지
+    @GetMapping("/join_new")
     public String join_new() {
-        return "join_new"; // templates/join_new.html
+        return "join_new";
     }
 
-    @PostMapping("/api/members") // 회원 가입 저장
+    // 회원가입 완료 처리
+    @PostMapping("/api/members")
     public String addmembers(@ModelAttribute AddMemberRequest request) {
         memberService.saveMember(request);
-        // 회원 저장 후 /join_end 로 이동 (URL도 /join_end 로 바뀜)
         return "redirect:/join_end";
     }
 
-    @GetMapping("/join_end") // 회원 가입 완료 페이지
+    @GetMapping("/join_end")
     public String join_end() {
-        return "join_end"; // templates/join_end.html
+        return "join_end";
     }
 
-    @GetMapping({"/login", "/member_login"}) // 로그인 페이지 연결
+    // 로그인 페이지
+    @GetMapping({"/login", "/member_login"})
     public String member_login() {
-        return "login"; // templates/login.html
+        return "login";
     }
 
-    @PostMapping("/api/login_check") // 로그인(아이디, 패스워드) 체크
-    public String checkMembers(@ModelAttribute AddMemberRequest request, Model model) {
+    // 로그인 체크
+    @PostMapping("/api/login_check")
+    public String checkMembers(@ModelAttribute AddMemberRequest request,
+                               Model model,
+                               HttpServletRequest req,
+                               HttpServletResponse res,
+                               HttpSession session) {
+
         try {
-            Member member = memberService.loginCheck(request.getEmail(), request.getPassword()); // 패스워드 반환
-            model.addAttribute("member", member); // 로그인 성공 시 회원 정보 전달
-            return "redirect:/board_list"; // 로그인 성공 후 이동할 페이지
+            // 이메일/비밀번호 확인
+            Member member = memberService.loginCheck(request.getEmail(), request.getPassword());
+
+            // 기존 세션 제거
+            HttpSession oldSession = req.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+
+                // JSESSIONID 쿠키 삭제
+                Cookie delCookie = new Cookie("JSESSIONID", null);
+                delCookie.setPath("/");
+                delCookie.setMaxAge(0);
+                res.addCookie(delCookie);
+            }
+
+            // 새로운 세션 생성
+            session = req.getSession(true);
+            session.setAttribute("userId", member.getId());
+            session.setAttribute("email", member.getEmail());
+
+            return "redirect:/board_list";
+
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage()); // 에러 메시지 전달
-            return "login"; // 로그인 실패 시 로그인 페이지로
+            model.addAttribute("error", e.getMessage());
+            return "login";
+        }
+    }
+
+    // 로그아웃
+    @GetMapping("/api/logout")
+    public String member_logout(Model model,
+                                HttpServletRequest request,
+                                HttpServletResponse response) {
+
+        try {
+            // 기존 세션 무효화
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+
+                // JSESSIONID 쿠키 삭제
+                Cookie cookie = new Cookie("JSESSIONID", null);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+
+            // 새로운 빈 세션 생성(선택)
+            request.getSession(true);
+
+            return "login";
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "login";
         }
     }
 }

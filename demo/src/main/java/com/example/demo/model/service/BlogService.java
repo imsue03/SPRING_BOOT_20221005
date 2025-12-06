@@ -2,6 +2,7 @@ package com.example.demo.model.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +17,15 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor // 생성자 자동 생성(부분)
 public class BlogService {
+
+    
     @Autowired // 객체 주입 자동화, 생성자 1개면 생략 가능
     private final BlogRepository blogRepository; // 리포지토리 선언
+    private final BoardRepository boardRepository;
     private final BoardRepository blogRepository2;
     
     public Article save(AddArticleRequest request) {
+        
             // DTO가 없는 경우 이곳에 직접 구현 가능
             // public ResponseEntity<Article> addArticle(@RequestParam String title,
             // @RequestParam String content) {
@@ -60,6 +65,12 @@ public class BlogService {
             });
     }
 
+    public void deleteById(Long id) {
+        blogRepository2.deleteById(id);
+    }
+    
+
+
     public List<Board> findAll() { // 게시판 전체 목록 조회
         return blogRepository2.findAll();
     }
@@ -70,4 +81,22 @@ public class BlogService {
     public void delete(Long id) {
         blogRepository.deleteById(id);
     }
+
+
+
+    public void updateBoard(Long id, AddBoardRequest request) {
+
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        board.setTitle(request.getTitle());
+        board.setContent(request.getContent());
+        board.setUser(request.getUser());
+
+        // 날짜를 자동으로 LocalDate 로 다시 저장
+        board.setNewdate(LocalDate.now());
+
+        boardRepository.save(board);
+    }
+
 }

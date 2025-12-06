@@ -127,26 +127,59 @@ public class BlogController {
         return "board_write";
     }
 
-    @PostMapping("/api/boards") // 글쓰기 게시판 저장
-    public String addboards(@ModelAttribute AddBoardRequest request) {
-        blogService.save(request);
-        return "redirect:/board_list"; // .HTML 연결
-    }
-
-
-    @GetMapping("/board_view/{id}") // 게시판 링크 지정
-    public String board_view(Model model, @PathVariable Long id) {
-        Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
-
-        if (list.isPresent()) {
-            model.addAttribute("boards", list.get()); // 존재할 경우 실제 Board 객체를 모델에 추가
-        } else {
-            // 처리할 로직 추가 (예: 오류 페이지로 리다이렉트, 예외 처리 등)
-            return "/error_page/article_error"; // 오류 처리 페이지로 연결
+    @PostMapping("/api/boards")
+    public String addboards(@ModelAttribute AddBoardRequest request, HttpSession session) {
+     String email = (String) session.getAttribute("email");
+        if (email == null) {
+            email = "GUEST"; // 로그인 안되어 있으면 기본값
         }
-        return "board_view"; // .HTML 연결
+        request.setUser(email);  // 작성자 저장
+        blogService.save(request);
+        return "redirect:/board_list";
     }
 
-    
 
+    @GetMapping("/api/board_delete")
+    public String boardDelete(@RequestParam Long id) {
+        blogService.deleteById(id);
+        return "redirect:/board_list";
+    }
+
+
+
+    @GetMapping("/board_view/{id}")
+    public String board_view(Model model, @PathVariable Long id, HttpSession session) {
+        Optional<Board> list = blogService.findById(id);
+        if (list.isEmpty()) {
+            return "/error_page/article_error";
+        }
+
+        Board board = list.get();
+        model.addAttribute("boards", board);
+        // 로그인 사용자 email
+        String loginUser = (String) session.getAttribute("email");
+        model.addAttribute("loginUser", loginUser);
+
+        return "board_view";
+    }
+
+    @GetMapping("/board_edit/{id}")
+    public String boardEdit(@PathVariable Long id, Model model) {
+        Optional<Board> board = blogService.findById(id);
+
+        if(board.isPresent()) {
+            model.addAttribute("board", board.get());
+            return "board_edit";
+        } else {
+            return "/error_page/article_error";
+        }
+    }
+
+    @PutMapping("/api/boards_update/{id}")
+    public String updateBoard(@PathVariable Long id,
+                            @ModelAttribute AddBoardRequest request) {
+
+        blogService.updateBoard(id, request);
+        return "redirect:/board_list";
+    }
 }

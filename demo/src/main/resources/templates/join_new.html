@@ -9,6 +9,13 @@
 </head>
 
 <body>
+
+    <script th:if="${errorMessage != null}">
+        alert('[[${errorMessage}]]');
+    </script>
+
+
+
     <div class="container">
         <h1 class="mt-5">회원 가입 화면</h1>
         <!-- 회원가입 폼 -->

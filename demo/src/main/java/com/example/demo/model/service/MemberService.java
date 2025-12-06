@@ -3,15 +3,19 @@ package com.example.demo.model.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.demo.model.domain.Member;
 import com.example.demo.model.repository.MemberRepository;
 
+
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Validated
 @Transactional // 트랜잭션 처리(클래스 내 모든 메소드 대상)
 @RequiredArgsConstructor
+
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder; // 스프링 버전 5 이후, 단방향 해싱 알고리즘 지원

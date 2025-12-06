@@ -34,10 +34,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="board : ${boards}">
-                        <td th:text="${board.id}"></td>
+                    <tr th:each="board, stat : ${boards}">
+                    <td th:text="${stat.index + 1}"></td>
                         <td>
-                            <a th:href="@{/board_view/{id}(id=${board.id})}">
+                            <a th:href="@{'/board_view/' + ${board.id}}">
                                 <span th:text="${board.title}"></span>
                             </a>
                         </td>
@@ -45,15 +45,15 @@
                         <td th:text="${board.newdate}"></td>
                         <td th:text="${board.count}"></td>
                         <td th:text="${board.likec}"></td>
-                        <!-- 수정 삭제 버튼 
-                         <td>
-                            <a class="btn btn-warning" th:href="@{/article_edit/{id}(id=${article.id})}">수정</a>
-                        삭제 버튼
-                            <form th:action="@{/articles/{id}(id=${article.id})}" method="post" style="display:inline;">
-                                <input type="hidden" name="_method" value="delete">
-                                <button type="submit" class="btn btn-danger">삭제</button>
-                            </form>
-                         </td> -->
+                        <td>
+                            <a class="btn btn-warning btn-sm" th:href="@{/board_edit/{id}(id=${board.id})}">수정</a>
+
+                            <a class="btn btn-danger btn-sm"
+                            th:href="@{/api/board_delete(id=${board.id})}"
+                            onclick="return confirm('정말 삭제하시겠습니까?');">
+                                삭제
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

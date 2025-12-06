@@ -1,0 +1,1 @@
+ALTER TABLE board MODIFY address VARCHAR(255) NULL;
